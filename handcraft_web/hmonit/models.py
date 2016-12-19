@@ -1,0 +1,145 @@
+# coding:utf-8
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+import datetime
+from django.db import models
+from huser.models import User, UserGroup, DEPT
+
+
+
+class Monit(models.Model):
+    RULE_TYPE_CHOICES = (
+        ('1', '是'),
+        ('0', '否'),
+    )
+    LEVEL_TYPE_CHOICES = (
+        ('0', '高'),
+        ('2', '中'),
+        ('4', '低'),
+        ('9', '最低'),
+    )
+    name = models.CharField(max_length=50, blank=True)
+    header = models.CharField(max_length=50, blank=True)
+    url = models.CharField(max_length=512, blank=True)
+    ip = models.CharField(max_length=512, blank=True)
+    contact = models.ManyToManyField(UserGroup)
+    rule = models.CharField(max_length=1,blank=True,null=True,default = 1)
+    json = models.CharField(max_length=1,blank=True,null=True,default = 1)
+    json_array = models.CharField(max_length=50, blank=True)
+    json_variable = models.CharField(max_length=50, blank=True)
+    parameter = models.CharField(max_length=256,blank=True)
+    level = models.CharField(max_length=1,blank=True,choices=LEVEL_TYPE_CHOICES,null=True,default = 0)
+    route = models.CharField(max_length=1,blank=True,null=True,default = 1)
+    date_added = models.DateTimeField(auto_now=True, default=datetime.datetime.now(), null=True)
+    date_monit = models.DateTimeField(auto_now=True, default=datetime.datetime.now(), null=True)
+    comment = models.CharField(max_length=100, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class IP_Status(models.Model):
+    ip = models.CharField(max_length=20, blank=True)
+    status = models.CharField(max_length=1, blank=True)
+    name = models.CharField(max_length=200, blank=True)
+
+    def __unicode__(self):
+        return self.ip
+
+
+class IP_Alarm_Status(models.Model):
+    ip = models.CharField(max_length=20, blank=True)
+    status = models.CharField(max_length=1, blank=True)
+
+    def __unicode__(self):
+        return self.ip
+
+class WEB_Status(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+    url = models.CharField(max_length=512, blank=True)
+    ip = models.CharField(max_length=512, blank=True)
+    level = models.CharField(max_length=1,blank=True)
+    status = models.CharField(max_length=1,blank=True)
+    date = models.DateTimeField(auto_now=True, default=datetime.datetime.now(), null=True)
+    information = models.CharField(max_length=512, blank=True)
+    name1 = models.CharField(max_length=50, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+class WEB_Alarm_Status(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+    url = models.CharField(max_length=512, blank=True)
+    status = models.CharField(max_length=1,blank=True)
+    information = models.CharField(max_length=512, blank=True)
+    frequency = models.CharField(max_length=512, blank=True)
+    header = models.CharField(max_length=50, blank=True)
+    name1 = models.CharField(max_length=50, blank=True)
+    
+    def __unicode__(self):
+        return self.name
+
+class Dnspod(models.Model):
+    TYPE_CHOICES = (
+            ('0', 'A'),
+            ('1', 'CNAME'),
+    )
+    RULE_TYPE_CHOICES = (
+            ('1', '是'),
+            ('0', '否'),
+    )
+    name = models.CharField(max_length=50, blank=True)
+    ip = models.CharField(max_length=20, blank=True)
+    type = models.CharField(max_length=1,blank=True,choices=TYPE_CHOICES,null=True,default = 0)
+    rule = models.CharField(max_length=1,blank=True,null=True,default = 1)
+
+    def __unicode__(self):
+        return self.name
+
+class Dnspod_Alarm(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+    ip = models.CharField(max_length=20, blank=True)
+    resolver = models.CharField(max_length=50, blank=True)
+    frequency = models.CharField(max_length=50, blank=True)
+    status = models.CharField(max_length=50, blank=True)
+    sip = models.CharField(max_length=50, blank=True)
+    
+    def __unicode__(self):
+        return self.name
+
+class Port(models.Model):
+    RULE_TYPE_CHOICES = (
+        ('1', '是'),
+        ('0', '否'),
+    )
+    ip = models.CharField(max_length=512, blank=True)
+    port = models.CharField(max_length=512, blank=True)
+    rule = models.CharField(max_length=1,blank=True,null=True,default = 1)
+    contact = models.ManyToManyField(UserGroup)
+    time = models.CharField(max_length=512, blank=True)
+    date = models.CharField(max_length=512, blank=True,null=True,default = '2016-01-01 10:00:00')
+    route = models.CharField(max_length=1,blank=True,null=True,default = 1)
+
+    def __unicode__(self):
+        return self.ip
+
+
+class Port_Ip_Alarm_Status(models.Model):
+    ip = models.CharField(max_length=512, blank=True)
+    status = models.CharField(max_length=512, blank=True)
+    frequency = models.CharField(max_length=512, blank=True)
+
+    def __unicode__(self):
+        return self.ip
+
+class Port_Alarm_Status(models.Model):
+    ip = models.CharField(max_length=512, blank=True)
+    port = models.CharField(max_length=512, blank=True)
+    status = models.CharField(max_length=512, blank=True)
+    frequency = models.CharField(max_length=512, blank=True)
+
+    def __unicode__(self):
+        return self.ip

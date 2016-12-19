@@ -1,0 +1,451 @@
+{% extends 'base.html' %}
+{% load mytags %}
+{% load humanize %}
+{% block content %}
+{% include 'nav_cat_bar.html' %}
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">Users</span>
+                    <h5>用户总数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins"><a href="/huser/user_list/">{{ users.count}}</a></h1>
+                    <div class="stat-percent font-bold text-success">{{ percent_user }} <i class="fa fa-bolt"></i></div>
+                    <small>All user</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-info pull-right">Hosts</span>
+                    <h5>主机总数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins"><a href="/hasset/host_list/">{{ hosts.count }}</a></h1>
+                    <div class="stat-percent font-bold text-info">{{ percent_host }} <i class="fa fa-level-up"></i></div>
+                    <small>All host</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">Online</span>
+                    <h5>监控总数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins"><a href="/hmonit/monit_list/">{{ monits.count }}</a></h1>
+                    <div class="stat-percent font-bold text-navy">{{ percent_monit }} <i class="fa fa-level-up"></i></div>
+                    <small>All monit</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-danger pull-right">Connected</span>
+                    <h5>IP状态报警</h5>
+                </div>
+                <div class="ibox-content">
+                        <h1 class="no-margins"><a href="/hmonit/monit_iplist/">{{ online_monit.count }}</a></h1>
+                    <div class="stat-percent font-bold text-danger">{{ percent_online_monit }} <i class="fa fa-level-down"></i></div>
+                    <small>IP disconnected</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-danger pull-right">Alarm</span>
+                    <h5>URL状态报警</h5>
+                </div>
+                <div class="ibox-content">
+                        <h1 class="no-margins"><a href="/hmonit/monit_alarmlist/">{{ alarm_monit.count }}</a></h1>
+                    <div class="stat-percent font-bold text-danger">{{ percent_alarm_monit }} <i class="fa fa-level-down"></i></div>
+                    <small>URL Alarm</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-11.5 border-bottom white-bg dashboard-header" style="margin-left:15px;height:390px">
+            <h2>Kuyun项目链接</h2>
+            <small><i class="fa fa-map-marker"></i> 北京苏州街机房及雍和宫机房监控信息.</small>
+            <li ><a href="http://centreon.cc.kuyun.com/index.php?disconnect=1" target="_blank">北京Centreon</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://cacti.cc.kuyun.com/cacti/index.php" target="_blank">北京Cacti</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.50.55/cacti/index.php" target="_blank">北京Cacti(高精度)</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://115.182.62.99/nagios/" target="_blank">北京Nagios</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.19.230:8086/" target="_blank">北京Smokeping</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://192.168.200.123/zabbix/dashboard.php?sid=c1c3166e0e5c1588" target="_blank">雍和宫Zabbix</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://192.168.200.123/cacti/" target="_blank">雍和宫Cacti</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </li>
+            </br>
+            <small><i class="fa fa-map-marker"></i> 省网监控信息.</small>
+            <li ><a href="http://125.62.12.146:2333/nagios/" target="_blank">重庆Nagios</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://119.44.217.28:8088/nagios/" target="_blank">长沙Nagios</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.30.10.6/centreon/" target="_blank">重庆采集centreon</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://14.29.1.95:7739/centreon/" target="_blank">广东TVMS Centreon</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://14.29.1.95:7739/cacti/" target="_blank">广东TVMS Cacti</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </li>
+            </br>
+            <small><i class="fa fa-map-marker"></i> CMDB资产信息管理.</small>
+            <li ><a href="http://racktables.cc.kuyun.com/" target="_blank">Racktables</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.19.230/zc/admin.php/Public/login" target="_blank">mpc(老版本资产)</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </li>
+            </br>
+            <small><i class="fa fa-map-marker"></i> 版本管理.</small>
+            <li ><a href="http://svn.in.kuyun.com/usvn/project/ops" target="_blank">Svn</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </li>
+            </br>
+            <small><i class="fa fa-map-marker"></i> 项目wiki信息管理.</small>
+            <li ><a href="http://172.21.19.230:8087/projects/kuyun-op/wiki/%E9%87%8D%E5%BA%86%E7%9C%81%E7%BD%91%E6%AD%A3%E5%BC%8F%E7%8E%AF%E5%A2%83" target="_blank">重庆省网</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.19.230:8087/projects/kuyun-op/wiki/%E5%B9%BF%E4%B8%9CTVMS%E6%AD%A3%E5%BC%8F%E7%8E%AF%E5%A2%83" target="_blank">广东TVMS</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.19.230:8087/projects/kuyun-op/wiki/%E6%B1%9F%E8%8B%8F%E5%B9%BF%E7%94%B5" target="_blank">江苏广电</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.19.230:8087/projects/kuyun-op/wiki/%E4%B8%8A%E6%B5%B7%E5%B9%BF%E7%94%B5%E6%AD%A3%E5%BC%8F%E7%8E%AF%E5%A2%83" target="_blank">上海广电</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.19.230:8087/projects/kuyun-op/wiki/%E6%96%B0%E7%96%86%E5%B9%BF%E7%94%B5%E6%AD%A3%E5%BC%8F%E7%8E%AF%E5%A2%83" target="_blank">新疆广电</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://172.21.19.230:8087/projects/kuyun-op/wiki/%E9%95%BF%E6%B2%99%E5%B9%BF%E7%94%B5%E6%AD%A3%E5%BC%8F%E7%8E%AF%E5%A2%83" target="_blank">长沙广电</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </li>
+            </br>
+            <small><i class="fa fa-map-marker"></i> 其他信息管理.</small>
+            <li ><a href="http://oa.in.kuyun.com/oaadmin/oa/" target="_blank">OA</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://redmine.in.kuyun.com/login?back_url=http%3A%2F%2Fredmine.in.kuyun.com%2F" target="_blank">Redmine</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;•</span>
+                 <a href="http://wiki.in.kuyun.com/index.php?title=%E9%A6%96%E9%A1%B5" target="_blank">Wiki</a><span class="p14 dot">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </li>
+
+    </div>
+
+    <!--div class="row">
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>权限申请</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user"></ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3><i class="fa fa-envelope-o"></i> 权限申请记录 </h3>
+                    <small><i class="fa fa-map-marker"></i> 最近十条权限申请记录信息.</small>
+                </div>
+                <div class="ibox-content">
+                    <div class="feed-activity-list">
+                        {% if perm_apply_10 %}
+                            {% for perm in perm_apply_10 %}
+                                <div class="feed-element">
+                                    <div>
+                                        {% ifequal perm.status 0 %}
+                                            <small class="pull-right text-navy">{{ perm.date_add|naturaltime }}</small>
+                                        {% else %}
+                                             <small class="pull-right">{{ perm.date_add|naturaltime }}</small>
+                                        {% endifequal %}
+                                        <strong>{{ perm.applyer }}</strong>
+                                        <div>申请 {{ perm.bisgroup|ast_to_list }} 主机组权限</div>
+                                        <div>申请 {{ perm.asset|ast_to_list }} 主机权限</div>
+                                        <small class="text-muted">{{ perm.date_add }}</small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-center">(暂无)</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div-->
+        <!--div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>最近十次登录</h5>
+                    <div class="ibox-tools">
+                        <span class="label label-info-light">10 Messages</span>
+                       </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3><i class="fa fa-paper-plane-o"></i> 登录记录 </h3>
+                    <small<i class="fa fa-map-marker"></i> 最近十次登录记录. </small>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <div class="feed-activity-list">
+                            {% if login_10 %}
+                                {% for login in login_10 %}
+                                    <div class="feed-element">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="/static/img/root.png">
+                                        </a>
+                                        <div class="media-body ">
+                                            {% ifequal login.is_finished 0 %}
+                                                <small class="pull-right text-navy">{{ login.start_time|naturaltime }}</small>
+                                            {% else %}
+                                                <small class="pull-right">{{ login.start_time|naturaltime }}</small>
+                                            {% endifequal %}
+                                            <strong>{{ login.user }}</strong> 登录了{{ login.host }} <br>
+                                            <small class="text-muted">{{ login.start_time }}</small>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                                <button id="show" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> 更多 </button>
+                                <div id='more' style="display: none">
+                                    <br/>
+                                    <div class="feed-activity-list">
+                                        {% for login in login_more_10 %}
+                                            <div class="feed-element">
+                                                <a href="profile.html" class="pull-left">
+                                                    <img alt="image" class="img-circle" src="/static/img/root.png">
+                                                </a>
+                                                <div class="media-body ">
+                                                    {% ifequal login.is_finished 0 %}
+                                                        <small class="pull-right text-navy">{{ login.start_time|naturaltime }}</small>
+                                                    {% else %}
+                                                        <small class="pull-right">{{ login.start_time|naturaltime }}</small>
+                                                    {% endifequal %}
+                                                    <strong>{{ login.user }}</strong> 登录了{{ login.host }} <br>
+                                                    <small class="text-muted">{{ login.start_time }}</small>
+
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="text-center">(暂无)</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div-->
+
+        <!--div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>一周Top10用户</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user"></ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3><i class="fa fa-user"></i> 一周Top10用户 </h3>
+                    <small><i class="fa fa-map-marker"></i> 一周Top10用户登录次数及最近一次登录记录. </small>
+                </div>
+                <div class="ibox-content inspinia-timeline">
+                    {% if user_top_ten %}
+                        {% for data in user_top_ten %}
+                            <div class="timeline-item">
+                                <div class="row">
+                                    <div class="col-xs-5 date">
+                                        <i class="fa fa-info-circle"></i>
+                                        <strong>{{ data.user }}</strong>
+                                        <br/>
+                                        <small class="text-navy">{{ data.times }}次</small>
+                                    </div>
+                                    <div class="col-xs-7 content no-top-border">
+                                        <p class="m-b-xs">最近一次登录</p>
+                                        <p>{{ data.last.host }}</p>
+                                        <p>于{{ data.last.start_time |date:"Y-m-d H:i:s" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center">(暂无)</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div-->
+
+    <!--</div>-->
+            <!--<div class="col-xm-6" id="top10" style="width:50%;height:400px;"></div>-->
+            <!--<div class="col-xm-6" id="usertop10" style="width:50%;height:400px;"></div>-->
+        <!--<div class="row">-->
+            <!--<div class="col-lg-6" id="hosttop10" style="width:50%;height:400px; margin-top: 20px"></div>-->
+        <!--</div>-->
+</div>
+
+<script>
+$(document).ready(function(){
+    $('#show').click(function(){
+        $('#show').css('display', 'none');
+        $('#more').css('display', 'block');
+    })
+})
+var cate = {{ li_str|safe }};
+$(function () {
+    $('#top10').highcharts({
+//        chart: {
+//            type: 'column'
+//        },
+        title: {
+            text: '一周数据总览',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: JumpServer',
+            x: -20
+        },
+        rangeSelector: {
+            allButtonsEnabled: true,
+            selected: 2
+        },
+        xAxis: {
+            type: 'datetime',
+            categories: cate
+        },
+        yAxis:{
+            min: 0,
+            title: {
+                text: ''
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '次'
+        },
+        navigation: {
+            buttonOptions: {
+                align: 'right'
+            }
+        },
+        series: [
+            {% for k,v in top_dic.items %}
+                {
+                    name: '{{ k }}',
+                    data: {{ v }}
+                },
+            {% endfor %}
+        ]
+    });
+
+    $('#usertop10').highcharts({
+        title: {
+            text: '一周用户登录TOP10',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: JumpServer',
+            x: -20
+        },
+        xAxis: {
+            type: 'datetime',
+            categories: cate
+        },
+        yAxis:{
+            min: 0,
+            title: {
+                text: '登录次数'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '次'
+        },
+        series: [
+            {% for k,v in user_dic.items %}
+                {
+                    name: '{{ k }}',
+                    data: {{ v }}
+                },
+            {% endfor %}
+        ]
+    });
+
+        $('#hosttop10').highcharts({
+        title: {
+            text: '一周主机登录TOP10',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: JumpServer',
+            x: -20
+        },
+        xAxis: {
+            type: 'datetime',
+            categories: cate
+        },
+        yAxis:{
+            min: 0,
+            title: {
+                text: '登录次数'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '次'
+        },
+        series: [
+            {% for k,v in host_dic.items %}
+                {
+                    name: '{{ k }}',
+                    data: {{ v }}
+                },
+            {% endfor %}
+        ]
+    });
+
+    function magic_number(value, id) {
+        var num = $("#"+id);
+        num.animate({count: value}, {
+            duration: 500,
+            step: function() {
+                num.text(String(parseInt(this.count)));
+            }
+        });
+    };
+
+    function update() {
+        $.getJSON('api/user/',  function(data) {
+            var users = data.users;
+            var hosts = data.hosts;
+            magic_number(users, 'online_users');
+            magic_number(hosts, 'online_hosts')
+        });
+    };
+
+    setInterval(update, 5000); //5秒钟执行一次
+    update();
+
+});
+</script>
+
+{% endblock %}

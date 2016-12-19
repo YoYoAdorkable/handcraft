@@ -1,0 +1,7 @@
+<uwsgi>
+    <socket>127.0.0.1:9999</socket>
+    <chdir>/var/www/html/handcraft/handcraft</chdir>
+    <module>wsgi</module>
+    <processes>4</processes>
+    <daemonize>/ky/data/nginx/uwsgi.log</daemonize>
+</uwsgi>

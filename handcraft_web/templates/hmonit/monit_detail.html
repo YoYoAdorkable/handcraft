@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load mytags %}
+
+
+{% block content %}
+    {% include 'nav_cat_bar.html' %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="text text-primary"><b>{{ post.name }}</b></span>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+                        <h3>监控详细信息</h3>
+                        <small><i class="fa fa-map-marker"></i> 此监控详细信息.</small>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <div class="text-left">
+                                <table class="table">
+                                    <tr>
+                                        <td class="text-navy">名称</td>
+                                        <td>{{ post.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">Header</td>
+                                        <td>{{ post.header }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">URL</td>
+                                        <td class="text-navy">
+                                            <a value="/hmonit/monit_urllist/?id={{ post.name }}" class="iframe btn btn-xs btn-primary">详情</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">IP地址</td>
+                                        <td>{{ post.ip }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">报警组</td>
+                                        <td>
+                                             <table class="table">
+                                                 {% for contact in post.contact.all %}
+                                                    <tr>
+                                                        <td>{{ contact.name }}</td>
+                                                    </tr>
+                                                 {% endfor %}
+                                             </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">激活</td>
+                                        <td>{{ post.rule|bool2str }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">JSON</td>
+                                        <td>{{ post.json|bool2str }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">JSON数组名</td>
+                                        <td>{{ post.json_array }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">JSON键值名</td>
+                                        <td>{{ post.json_variable }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">关键字</td>
+                                        <td>{{ post.parameter }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">报警级别</td>
+                                        <td>{{ post.level|bool3str }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">路由状态</td>
+                                        <td>{{ post.route|bool4str }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">添加日期</td>
+                                        <td>{{ post.date_added|date:"Y-m-d H:i:s" }}</td>
+                                    </tr>
+                                    <tr>
+                                    <tr>
+                                        <td class="text-navy">监控执行时间</td>
+                                        <td>{{ post.date_monit|date:"Y-m-d H:i:s" }}</td>
+                                    </tr>
+                                        <td class="text-navy">备注</td>
+                                        <td>{{ post.comment }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>接收报警的用户</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+                        <h3>监控项接收报警的用户</h3>
+                        <small><i class="fa fa-map-marker"></i> 包含此监控项所有接收报警的用户.</small>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <div class="text-left">
+                                <table class="table">
+                                    {% if user_permed_list %}
+                                        {% for user in user_permed_list %}
+                                            <tr>
+                                                <td class="text-navy">{{ user.name }}</td>
+                                                <!--td>{{ user.dept.name }}</td-->
+                                                <td><a href="/huser/user_detail/?id={{ user.id }}">详情</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="text-center">(暂无)</p>
+                                    {% endif %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>最近一周告警记录</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+                        <h3>最近一周监控记录</h3>
+                        <small><i class="fa fa-map-marker"></i> 此监控项最近一周告警信息.</small>
+                    </div>
+                    <div class="ibox-content inspinia-timeline">
+                        {% if log %}
+                            {% for l in log %}
+                                <div class="timeline-item">
+                                    <div class="row">
+                                        <div class="col-xs-5 date">
+                                            <i class="fa fa-info-circle"></i>
+                                            <small class="text-navy">{{ l.user }}</small>
+                                            <br/>
+                                            <strong>{{l.dept_name}}</strong>
+                                        </div>
+                                        <div class="col-xs-7 content no-top-border">
+                                            <p class="m-b-xs"><strong>详细信息</strong></p>
+                                            <p>来源IP: {{ l.remote_ip }}</p>
+                                            <p>开始: {{ l.start_time |date:"Y-m-d H:i:s" }}</p>
+                                            <p>结束: {{ l.end_time |date:"Y-m-d H:i:s" }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <button id="show" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> 所有 </button>
+                            <div id='more' style="display: none">
+                            <br/>
+                            {% for l in log_more %}
+                                <div class="timeline-item">
+                                    <div class="row">
+                                        <div class="col-xs-5 date">
+                                            <i class="fa fa-info-circle"></i>
+                                            <small class="text-navy">{{ l.user }}</small>
+                                            <br/>
+                                            <strong>{{l.dept_name}}</strong>
+                                        </div>
+                                        <div class="col-xs-7 content no-top-border">
+                                            <p class="m-b-xs"><strong>详细信息</strong></p>
+                                            <p>来源IP: {{ l.remote_ip }}</p>
+                                            <p>开始: {{ l.start_time |date:"Y-m-d H:i:s" }}</p>
+                                            <p>结束: {{ l.end_time |date:"Y-m-d H:i:s" }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-center">(暂无)</p>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#show').click(function(){
+            $('#show').css('display', 'none');
+            $('#more').css('display', 'block');
+        })
+    });
+
+    $(".iframe").on('click', function(){
+        var url= $(this).attr("value");
+        $.layer({
+            type: 2,
+            title: 'Handcraft URL详情',
+            maxmin: true,
+            shift: 'top',
+            border: [2, 0.3, '#1AB394'],
+            shade: [0.5, '#000000'],
+            shadeClose: true,
+            area : ['800px' , '600px'],
+            iframe: {src: url}
+        });
+    })
+</script>
+
+
+{% endblock %}
